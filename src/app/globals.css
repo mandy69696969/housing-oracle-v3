@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: var(--font-instrument), serif;
+  --font-mono: var(--font-dm-mono), monospace;
+  --font-body: var(--font-dm-sans), sans-serif;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface2);
+  --color-border: var(--border);
+  --color-border-2: var(--border2);
+  --color-text: var(--text);
+  --color-text-2: var(--text2);
+  --color-text-3: var(--text3);
+  
+  --color-blue: var(--blue);
+  --color-green: var(--green);
+  --color-red: var(--red);
+  --color-amber: var(--amber);
+
+  --animate-fade-in: fade-in 0.4s ease both;
+  --animate-slide-up: slide-up 0.5s ease both;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ── Fintech Theme Variables ── */
+:root {
+  /* Light mode */
+  --bg: #F5F4F0;
+  --surface: #FFFFFF;
+  --surface2: #F0EEE8;
+  --border: #E2DDD6;
+  --border2: #D0C9BF;
+  --text: #0D1117;
+  --text2: #4A5568;
+  --text3: #8A95A3;
+  --blue: #1A3FD8;
+  --blue-bg: #EEF2FF;
+  --green: #0A7C52;
+  --green-bg: #ECFDF5;
+  --red: #C8192A;
+  --red-bg: #FEF2F2;
+  --amber: #B45309;
+  --amber-bg: #FFFBEB;
+}
+
+[data-theme="dark"] {
+  --bg: #080C14;
+  --surface: #0F1622;
+  --surface2: #141C2E;
+  --border: #1E2A3E;
+  --border2: #2A3A54;
+  --text: #E8EDF5;
+  --text2: #8A9BB5;
+  --text3: #4A5D78;
+  --blue: #4D74FF;
+  --blue-bg: #0F1A3A;
+  --green: #10B981;
+  --green-bg: #022C20;
+  --red: #F87171;
+  --red-bg: #2A0A0A;
+  --amber: #FBBF24;
+  --amber-bg: #1C1200;
+}
+
+/* ── Resets ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-dm-sans), sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+  transition: background .3s, color .3s;
+}
+
+/* ── Institutional Cards ── */
+.fintech-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  transition: box-shadow .2s, border-color .2s;
+}
+.fintech-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: var(--border2);
+}
+
+/* ── Typography Utilities ── */
+.font-instrument { font-family: var(--font-instrument), serif; }
+.font-dm-mono { font-family: var(--font-dm-mono), monospace; }
+.font-dm-sans { font-family: var(--font-dm-sans), sans-serif; }
+
+/* ── Leaflet Theme ── */
+.leaflet-container { 
+  background: var(--bg) !important; 
+  font-family: var(--font-dm-mono), monospace !important; 
+}
+.leaflet-popup-content-wrapper {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+  color: var(--text) !important;
+}
+.leaflet-popup-tip { background: var(--surface) !important; }
+
+/* ── Recharts Labels ── */
+.recharts-text { font-family: var(--font-dm-mono), monospace !important; }
