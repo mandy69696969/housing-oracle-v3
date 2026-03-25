@@ -7,19 +7,20 @@ export const MiniGlobe = () => {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!mountRef.current) return;
+    const el = mountRef.current; // capture ref for cleanup
+    if (!el) return;
     
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     
-    const size = mountRef.current.clientWidth;
+    const size = el.clientWidth;
     renderer.setSize(size, size);
-    mountRef.current.appendChild(renderer.domElement);
+    el.appendChild(renderer.domElement);
 
     const geometry = new THREE.SphereGeometry(2.1, 32, 32);
     const material = new THREE.MeshPhongMaterial({ 
-      color: 0x1A3FD8, // Institutional Blue
+      color: 0x1A3FD8,
       wireframe: true, 
       transparent: true, 
       opacity: 0.15 
@@ -27,7 +28,6 @@ export const MiniGlobe = () => {
     const globe = new THREE.Mesh(geometry, material);
     scene.add(globe);
 
-    // Inner Shell for volume
     const innerGeo = new THREE.SphereGeometry(1.9, 16, 16);
     const innerMat = new THREE.MeshPhongMaterial({ color: 0x1A3FD8, opacity: 0.05, transparent: true });
     const innerGlobe = new THREE.Mesh(innerGeo, innerMat);
@@ -51,9 +51,13 @@ export const MiniGlobe = () => {
 
     return () => {
       cancelAnimationFrame(frame);
-      if (mountRef.current && renderer?.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (el && renderer.domElement.parentNode === el) {
+        el.removeChild(renderer.domElement);
       }
+      geometry.dispose();
+      material.dispose();
+      innerGeo.dispose();
+      innerMat.dispose();
       renderer.dispose();
     };
   }, []);

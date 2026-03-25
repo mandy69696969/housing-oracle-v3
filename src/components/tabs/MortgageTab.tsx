@@ -66,7 +66,7 @@ export const MortgageTab = ({ data: injectedData }: Props) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-3 gap-4">
              <div className="fintech-card p-6">
                 <span className="font-mono text-[9px] text-text3 uppercase block mb-1">Monthly P&I</span>
                 <span className="font-display text-2xl text-text">${Math.round(monthlyPayment).toLocaleString()}</span>
@@ -74,6 +74,13 @@ export const MortgageTab = ({ data: injectedData }: Props) => {
              <div className="fintech-card p-6">
                 <span className="font-mono text-[9px] text-text3 uppercase block mb-1">Total Loan Cost</span>
                 <span className="font-display text-2xl text-text">${Math.round(principal + totalInterest).toLocaleString()}</span>
+             </div>
+             <div className="fintech-card p-6">
+                <span className="font-mono text-[9px] text-text3 uppercase block mb-1">Loan-to-Value</span>
+                <span className={`font-display text-2xl ${(100 - down) <= 80 ? 'text-green' : 'text-red'}`}>{100 - down}%</span>
+                <span className={`font-mono text-[8px] block mt-1 ${(100 - down) <= 80 ? 'text-green' : 'text-red'}`}>
+                  {(100 - down) <= 80 ? '✓ CONFORMING' : '⚠ HIGH LTV'}
+                </span>
              </div>
           </div>
         </div>

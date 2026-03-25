@@ -31,6 +31,11 @@ export const ControlPanel = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Sync address input when location changes externally (e.g. map click)
+  React.useEffect(() => {
+    if (location?.display) setAddressInput(location.display);
+  }, [location]);
+
   const handleSearch = async (val: string) => {
     setAddressInput(val);
     if (val.length < 3) {
@@ -44,21 +49,17 @@ export const ControlPanel = () => {
   const handleAnalyze = async () => {
     if (isAnalyzing) return;
     
-    let targetLoc = location;
-    if (!targetLoc && suggestions.length > 0) {
-      targetLoc = {
-        lat: parseFloat(suggestions[0].lat),
-        lon: parseFloat(suggestions[0].lon),
-        display: suggestions[0].display_name,
-        city: suggestions[0].address?.city || suggestions[0].address?.town || suggestions[0].display_name.split(',')[0],
-        countryCode: suggestions[0].address?.country_code?.toUpperCase() || 'US'
-      };
-      setLocation(targetLoc);
-      setAddressInput(targetLoc.display);
+    if (!location && suggestions.length > 0) {
+      const picked = suggestions[0];
+      setLocation(picked);
+      setAddressInput(picked.display || '');
       setSuggestions([]);
+      // location will be set by next render; run analysis on picked
+      setTimeout(() => runAnalysis(), 50);
+      return;
     }
 
-    if (!targetLoc) return;
+    if (!location) return;
     runAnalysis();
   };
 

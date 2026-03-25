@@ -16,13 +16,14 @@ export const orchestrateAnalysis = async (
   onProgress: (step: string, progress: number) => void
 ) => {
   try {
-    const countryName = location.display.split(',').pop()?.trim() || 'USA';
+    const countryName = location.country || location.display.split(',').pop()?.trim() || 'USA';
+    const cc = location.countryCode || 'US';
     
     // 1. Parallel Data Fetching
     onProgress("Fetching multi-vector institutional data...", 20);
     const [poi, macro, climate, fredRate, imfData, restCountry, elevation] = await Promise.all([
       fetchPOIData(location.lat, location.lon),
-      fetchWorldBankData(location.countryCode),
+      fetchWorldBankData(cc),
       fetchClimateData(location.lat, location.lon),
       fetchFREDData(),
       fetchIMFData(),
@@ -44,13 +45,14 @@ export const orchestrateAnalysis = async (
     
     // 4. ML Regression (TensorFlow.js)
     onProgress("Running Neural Net institutional valuation...", 75);
+    const bedroomCount = parseInt(propConfig.bedrooms) || 1; // "Studio" → NaN → 1
     const featureVector = [
       poiScores.transitScore / 100,
       poiScores.amenityDensity / 100,
-      (macro?.gdpPerCapita || 45000) / 100000,
-      (macro?.inflation || 2.5) / 10,
-      (macro?.gdpGrowth || 1.5) / 5,
-      parseInt(propConfig.bedrooms) / 5,
+      (macro.gdpPerCapita) / 100000,
+      (macro.inflation) / 10,
+      (macro.gdpGrowth) / 5,
+      bedroomCount / 5,
       2 / 5, // propertyTypeCode placeholder
       Math.min(1, elevation / 5000) 
     ];

@@ -31,7 +31,7 @@ export const OverviewTab = ({ data }: Props) => {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <span className="px-2 py-0.5 bg-blue-bg text-blue text-[9px] font-mono font-bold rounded-sm border border-blue/10">CORE VALUATION</span>
-              <span className="font-mono text-[9px] text-text3">DOM: 18 DAYS</span>
+              <span className="font-mono text-[9px] text-text3">DOM: {analysis.timeline?.daysOnMarket || 18} DAYS</span>
             </div>
             <h2 className="font-display text-5xl text-text mb-2">${price.toLocaleString()}</h2>
             <div className="flex items-center gap-4 font-mono text-xs text-text2">

@@ -26,9 +26,13 @@ export const TrendsTab = ({ data: injectedData }: Props) => {
   ];
 
   const smoothed = holtsSmoothing(historical, 0.4, 0.3);
+
+  const labels = ['-10M', '-8M', '-6M', '-4M', '-2M', 'NOW'];
+  const forecastLabels = smoothed.slice(6).map((_: number, i: number) => `+${(i+1)*2}M`);
+  const allLabels = [...labels, ...forecastLabels];
   
-  const chartData = smoothed.map((p, i) => ({
-    name: i < 6 ? `-${(5-i)*2}M` : `+${(i-5)*2}M`,
+  const chartData = smoothed.map((p: number, i: number) => ({
+    name: allLabels[i] || `+${(i-5)*2}M`,
     price: p,
     isForecast: i >= 5
   }));
@@ -40,7 +44,7 @@ export const TrendsTab = ({ data: injectedData }: Props) => {
           <div className="flex justify-between items-center mb-10">
             <div>
               <h3 className="font-display text-xl text-text">Price Velocity</h3>
-              <p className="font-mono text-[10px] text-text3 uppercase">Trailing 12M vs Projected 12M</p>
+              <p className="font-mono text-[10px] text-text3 uppercase">Trailing 12M vs Projected 12M · Holt&apos;s Smoothing</p>
             </div>
             <div className="flex items-center gap-4">
                <div className="flex items-center gap-1.5 font-mono text-[9px] text-text2 uppercase">
@@ -83,7 +87,7 @@ export const TrendsTab = ({ data: injectedData }: Props) => {
                   contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '6px', fontSize: '10px' }}
                   itemStyle={{ color: 'var(--blue)', fontWeight: 'bold' }}
                 />
-                <ReferenceLine x="-0M" stroke="var(--blue)" strokeDasharray="3 3" label={{ position: 'top', value: 'PRESENT', fill: 'var(--blue)', fontSize: 8, fontFamily: 'DM Mono' }} />
+                <ReferenceLine x="NOW" stroke="var(--blue)" strokeDasharray="3 3" label={{ position: 'top', value: 'PRESENT', fill: 'var(--blue)', fontSize: 8, fontFamily: 'DM Mono' }} />
                 <Area 
                   type="monotone" 
                   dataKey="price" 
