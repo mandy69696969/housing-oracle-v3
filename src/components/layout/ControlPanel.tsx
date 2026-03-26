@@ -49,13 +49,14 @@ export const ControlPanel = () => {
   const handleAnalyze = async () => {
     if (isAnalyzing) return;
     
+    // If no location selected but suggestions exist, auto-pick the first one
     if (!location && suggestions.length > 0) {
       const picked = suggestions[0];
       setLocation(picked);
       setAddressInput(picked.display || '');
       setSuggestions([]);
-      // location will be set by next render; run analysis on picked
-      setTimeout(() => runAnalysis(), 50);
+      // Pass directly — don't rely on state propagation
+      runAnalysis(picked);
       return;
     }
 
